@@ -1,4 +1,4 @@
-# BOB (Bits, Ordinals, Bytes) and friends:
+# BOB (Bits, Ordinals, Bytes) and friends
 
 ## Why?
 Does it really make sense to waste all that time poring over text corpora, breaking it up into subwords, and training them into hundreds of millions of parameters of a big, slow lookup table just for a model that only produces ~3-4 English characters per model pass? And, if you don't tie those parameters to the LM head, to devote hundreds of millions more params for predicting said ~3-4 tokens/pass? BOB doesn't think so.
