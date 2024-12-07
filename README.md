@@ -1,7 +1,7 @@
 # BOB (Bits, Ordinals, Bytes) and friends:
 
 ## Why?
-Does it really make sense to waste all that time poring over text corpora, breaking it up into subwords, and training them into hundreds of millions of parameters of a big, slow lookup table just for a model that only produces ~3-4 English characters per model pass? And if you don't tie those parameters to the LM head, devote hundreds of millions more params for predicting said ~3-4 tokens/pass? BOB doesn't think so.
+Does it really make sense to waste all that time poring over text corpora, breaking it up into subwords, and training them into hundreds of millions of parameters of a big, slow lookup table just for a model that only produces ~3-4 English characters per model pass? And, if you don't tie those parameters to the LM head, to devote hundreds of millions more params for predicting said ~3-4 tokens/pass? BOB doesn't think so.
 
 BOB wraps a language model with nonparametric input and output utilities to replace tokenization completely; without the inefficiency commonly associated with byte-level or character-level modeling (one byte/character per pass), with more character-dense representations than typical pooling or patching setups (e.g. [MegaByte](https://arxiv.org/abs/2305.07185), [SpaceByte](https://arxiv.org/abs/2404.14408)), and produces more characters/pass than byte-/character-level alternatives even when they leverage speculative decoding (e.g. [MambaByte](https://arxiv.org/abs/2401.13660)) or [Multi-token Prediction](https://arxiv.org/abs/2404.19737) (and, being orthogonal, can be combined with such approaches). 
 
