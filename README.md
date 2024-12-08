@@ -15,7 +15,7 @@ BAT takes input text and produces character ordinals (i.e. the outputs of Python
 ### BAE (BOB Anti-Embeddings)
 BOB and his BAT get lonely sometimes, but BAE is the perfect companion.
 
-Instead of said, usually massive, (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix), BAE transforms and combines model input vectors on the fly from BAT's outputs (get it?): 
+Instead of said, usually massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix), BAE transforms and combines model input vectors on the fly from BAT's outputs (get it?): 
 
 1. Stacked horizontal bitmasks of ordinals vertically by increasing powers of 2,
 2. Bit lengths of each ordinal,
