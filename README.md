@@ -29,6 +29,6 @@ The resulting outputs are vectors somewhat similar to those resulting from token
 ### BLAH (BOB Language model Anti-Head)
 BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
 
-BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. For now, this is as simple as $`HardTanh(x)`$ where $`min = 0, max = 1`$ (or $`ReLU1(x)`$, if you will) with a reconstruction of every 8 bits to a byte. Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
+BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. For now, this is as simple as $`HardTanh(x)`$ where $`min = 0, max = 1`$ (or $`ReLU1(x)`$, if you will) with a reconstruction of every 8 bits to a byte. Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds common speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass.
