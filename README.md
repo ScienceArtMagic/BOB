@@ -15,7 +15,7 @@ BAT takes input text and produces character ordinals (i.e. the outputs of Python
 ### BAE (BOB Anti-Embeddings)
 BOB and his BAT get lonely sometimes, but BAE is the perfect companion.
 
-Instead of said, usually massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix), BAE transforms and combines model input vectors on the fly from BAT's outputs (get it?): 
+Instead of the usually massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines model input vectors on the fly from BAT's outputs (get it?): 
 
 1. Stacked horizontal bitmasks of ordinals vertically by increasing powers of 2,
 2. Bit lengths of each ordinal,
@@ -29,6 +29,10 @@ The resulting outputs are vectors somewhat similar to those resulting from token
 ### BLAH (BOB Language model Anti-Head)
 BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
 
-BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. For now, this is as simple as $`HardTanh(x)`$ where $`min = 0, max = 1`$ (or $`ReLU1(x)`$, if you will) with a reconstruction of every 8 bits to a byte. Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds common speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
+BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. 
+
+For now, this is as simple as a [straight-through estimator](https://arxiv.org/abs/1308.3432) (boolean cast to float for $`x > 0`$ in the forward pass, $`HardTanh(x)`$ where $`min = -1, max = 1`$ in the backward pass) with a reconstruction of every 8 bits to a byte. Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds common speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
+
+If you can afford the storage space, another option is a datastore-retrieval solution such as the awkwardly-abbreviated [REST (Retrieval-Based Speculative Decoding)](https://arxiv.org/abs/2311.08252).
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass.
