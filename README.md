@@ -31,7 +31,7 @@ BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
 
 BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. 
 
-For now, this is as simple as a [straight-through estimator](https://arxiv.org/abs/1308.3432) (boolean cast to float for $`x > 0`$ in the forward pass, $`HardTanh(x)`$ where $`min = -1, max = 1`$ in the backward pass) with a reconstruction of every 8 bits to a byte. 
+This can be (and currently is only) as simple as a [straight-through estimator](https://arxiv.org/abs/1308.3432) (boolean cast to float for $`x > 0`$ in the forward pass, $`HardTanh(x)`$ where $`min = -1, max = 1`$ in the backward pass) with a reconstruction of every 8 bits to a byte. 
 
 Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds common speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
 
