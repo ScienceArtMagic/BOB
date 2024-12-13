@@ -10,28 +10,28 @@ BOB wraps a language model with nonparametric input and output utilities to repl
 ### BAT (BOB Anti-Tokenizer)
 BOB is quite the contrarian. Why wouldn't BOB have a BAT?
 
-BAT takes input text and produces character ordinals (i.e. the outputs of Python's `ord()` built-in or JavaScipt's `.charCodeAt[0]` property), their bit length, and bytes (as integer representations).
+BAT takes input text and produces character ordinals (i.e. the outputs of Python's `ord()` built-in or JavaScipt's `.charCodeAt` property), their bit length (whose usefulness becomes more apparent with BAE), and bytes (as integer representations).
 
 ### BAE (BOB Anti-Embeddings)
 BOB and his BAT get lonely sometimes, but BAE is the perfect companion.
 
-Instead of the usually massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines model input vectors on the fly from BAT's outputs (get it?): 
+Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines BAT's outputs into model input vectors on the fly (get it?): 
 
-1. Stacked horizontal bitmasks of ordinals vertically by increasing powers of 2,
+1. Vertically-stacked horizontal bitmasks of ordinals, increasing by powers of 2,
 2. Bit lengths of each ordinal,
 3. Byte representations,
-4. Pooled combinations thereof
-5. Concatenates them all to a single vector
-6. Offsetts unfilled slots to avoid zero inputs.
+4. Pooled combinations thereof.
 
-The resulting outputs are vectors somewhat similar to those resulting from tokenization + WTE lookup, but leveraging the information available from basic string conversion methods instead.
+BAE then concatenates them all to a single vector, and offsets unfilled slots to avoid zero inputs.
+
+The resulting vectors are somewhat similar to those resulting from tokenization + WTE lookup but, other than special "tokens," only need the information available from basic string conversion methods.
 
 ### BLAH (BOB Language model Anti-Head)
 BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
 
 BLAH eliminates the need for (yet another) massive `hidden_dim * vocab_size` matrix for token lookup. 
 
-This can be (and currently is only) as simple as a [straight-through estimator](https://arxiv.org/abs/1308.3432) (boolean cast to float for $`x > 0`$ in the forward pass, $`HardTanh(x)`$ where $`min = -1, max = 1`$ in the backward pass) with a reconstruction of every 8 bits to a byte. 
+This can be as simple as (and currently is only) a [straight-through estimator](https://arxiv.org/abs/1308.3432) (boolean cast to number for $`x > 0`$ in the forward pass, $`HardTanh(x)`$ where $`min = -1, max = 1`$ in the backward pass) with a reconstruction of every 8 bits to a byte. For multi-byte characters, the two highest bits of the appropriate number of continuation bytes will be prefilled to `[1, 0, ...]` (i.e. 1 byte for a start byte beginning with `[1, 1, 0, ...]`, 2 for `[1, 1, 1, 0, ...]`, 3 for `[1, 1, 1, 1, 0, ...]`). 
 
 Other methods may be available in the future but, for now, this allows for a verbosity - `hidden_dim` (or `output_dim` if different) divided by 8 - that exceeds common speculative decoding methods (without an additional draft model, draft heads, or early exit - though, again, it is orthogonal to such techniques).
 
