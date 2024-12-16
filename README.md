@@ -39,3 +39,7 @@ Other methods may be available in the future but, for now, this allows for a ver
 TODO: Investigate the awkwardly-abbreviated [REST (Retrieval-Based Speculative Decoding)](https://arxiv.org/abs/2311.08252). This may be a focus (or at least inspiration) for a future BLAH option.
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass (TODO).
+
+## Note on Special Tokens
+
+No quotes here. Special tokens are still tokens/embeddings as in fully-tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`\b09`/`9` decimal, a.k.a. "tab" and `\n`/`b0a`/`10` decimal a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b00`/`0` to `b31`/`31` are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense.  
