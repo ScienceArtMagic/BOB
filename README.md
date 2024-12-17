@@ -52,6 +52,6 @@ In the future, more special tokens may be made available for the currently unuse
 
 BOB is surprisingly popular at the BAR. His no-nonsense demeanor plays well with generalists and specialists alike.
 
-BAR makes it easy to route more generalist parameters with bitmasks (e.g. "one or the other" on a parameter- and/or group-specific level from two identical blocks with different values), as well as far more numerous, specialized experts by bytes (including additional granularity for multi-byte characters) or even ordinals (theoretically 1,114,111 to choose from).
+BAR makes it easy to route more generalist parameters with bitmasks (i.e. "one or the other" on a parameter- and/or group-specific level from two identically-shaped blocks with different values), as well as far more numerous, specialized experts by bytes (including additional granularity for multi-byte characters) or even ordinals (theoretically 1,114,111 to choose from).
 
 This is possible without training a single gate (e.g. `nn.Linear`) and not relying on softmax, top-k, or other sampling methods (as one would usually expect in Mixture-of-Experts routing). The input bits, ordinals, and/or bytes decide for themselves, so you can focus on training the actual experts.
