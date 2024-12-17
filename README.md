@@ -10,15 +10,15 @@ BOB wraps a language model with nonparametric input and output utilities to repl
 ### BAT (BOB Anti-Tokenizer)
 BOB is quite the contrarian. Why wouldn't BOB have a BAT?
 
-BAT takes input text and produces character ordinals (i.e. the outputs of Python's `ord()` built-in or JavaScipt's `.charCodeAt` property), their bit length (whose usefulness becomes more apparent with BAE), and bytes (as integer representations).
+BAT takes input text and produces character ordinals (i.e. the outputs of Python's `ord()` built-in or JavaScipt's `.charCodeAt` property), their bit length (whose usefulness becomes more apparent with BAE), and bytes (as integer representations). Instead of token IDs, BAT hands these off to BAE for on-the-fly (get it?) construction of massively multi-character "token" "embeddings."
 
 ### BAE (BOB Anti-Embeddings)
 BOB and his BAT get lonely sometimes, but BAE is the perfect companion.
 
-Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines BAT's outputs into model input vectors on the fly (get it?): 
+Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines BAT's outputs into model input vectors: 
 
 1. Vertically-stacked horizontal bitmasks of ordinals, increasing by powers of 2 (3/16 of `hidden_dim`)
-2. Simple, compact Absolute Positional Encoding (explicit, "coarse"/per "token", 1/16 of `hidden_dim`)
+2. Simple, compact Absolute Positional Encoding (explicit, "coarse"/per "token", 1/16 of `hidden_dim`) based on iterable chunks of ordinals.
 3. Bit lengths of each ordinal (and thus, implicitly, fine per-character, and even, technically, explicit per-exact-bit APE - 3/8 of `hidden_dim`)
 4. Byte representations (3/8 of `hidden_dim`),
 5. Negative adaptive-average-pooled and mean representations of 3 and 4 in their unfilled slots.
@@ -40,6 +40,10 @@ TODO: Investigate the awkwardly-abbreviated [REST (Retrieval-Based Speculative D
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass (TODO).
 
-## Note on Special Tokens
+### SISTERS (SImple Special-Token-only Embeddings are Really Small)
 
-No quotes here. Special tokens are still tokens/embeddings as in fully-tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`\b09`/`9` decimal, a.k.a. "tab" and `\n`/`b0a`/`10` decimal a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b00`/`0` to `b31`/`31` are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense.  
+BOB and his friends make their own substitute "tokens"/"embeddings," but his SISTERS help with the real deal on special occasions.
+
+No quotes here. Special tokens are still tokens/embeddings just as they are in fully tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`b\x09`/`9` decimal, a.k.a. "tab" and `\n`/`b\x0a`/`10` decimal a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b\x00`/`0` to `b\x31`/`31` are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense. 
+
+In the future, more special tokens may be made available for the currently unused bytes `b\x80`/128 decimal through `b\x9f`/159 decimal, and possibly some of the many other control characters spread throughout Unicode (though 30 is already a lot, let alone 62).
