@@ -40,7 +40,7 @@ TODO: Investigate the awkwardly-abbreviated [REST (Retrieval-Based Speculative D
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass (TODO).
 
-### SISTERS (SImple Special-Token-only Embeddings are Really Small)
+### SISTERS (SImple Special Token Embeddings are Really Small)
 
 BOB and his friends make their own substitute "tokens"/"embeddings," but his SISTERS help with the real deal on special occasions.
 
