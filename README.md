@@ -47,3 +47,11 @@ BOB and his friends make their own substitute "tokens"/"embeddings," but his SIS
 No quotes here. Special tokens are still tokens/embeddings just as they are in fully tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`b\x09`/`9` decimal, a.k.a. "tab" and `\n`/`b\x0a`/`10` decimal a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b\x00`/`0` to `b\x31`/`31` are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense. 
 
 In the future, more special tokens may be made available for the currently unused bytes `b\x80`/128 decimal through `b\x9f`/159 decimal, and possibly some of the many other control characters spread throughout Unicode (though 30 is already a lot, let alone 62).
+
+### BAR (BOB Anti-Router)
+
+BOB is surprisingly popular at the BAR. His no-nonsense demeanor plays well with generalists and specialists alike.
+
+BAR makes it easy to route more generalist parameters with bitmasks (e.g. "one or the other" on a parameter-, group-specific level from two identical blocks with different values), as well as far more numerous, specialized experts by bytes (including additional granularity for multi-byte characters) or even ordinals (theoretically 1,114,111 to choose from).
+
+This is possible without training a single gate (e.g. `nn.Linear`) or relying on softmax, top-k, or other sampling methods. The input bits, ordinals, and/or bytes decide for themselves. 
