@@ -1,10 +1,11 @@
 import torch
+import torch.nn as nn
 
 # https://hassanaskary.medium.com/intuitive-explanation-of-straight-through-estimators-with-pytorch-implementation-71d99d25d9d0
 class STEFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input):
-        return (input > 0).float()
+        return (input > 0).to(torch.uint8)
 
     @staticmethod
     def backward(ctx, grad_output):
