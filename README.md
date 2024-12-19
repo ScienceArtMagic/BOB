@@ -46,7 +46,7 @@ BOB and his friends make their own substitute "tokens"/"embeddings," but his SIS
 
 No quotes here. Special tokens are still tokens/embeddings just as they are in fully tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`b\x09` (`9` base-10), a.k.a. "tab" and `\n`/`b\x0a` (`10` base-10) a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b\x00` (`0` base-10) to `b\x31` (`31` base-10) are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense. 
 
-In the future, more special tokens may be made available for the currently unused bytes `b\x80` (128 base-10) through `b\x9f` (159 base-10), and possibly some of the many other control characters spread throughout Unicode (though 30 is already a lot, let alone 62).
+In the future, more special tokens may be made available for the currently unused bytes `b\x80` (`128` base-10) through `b\x9f` (`159` base-10), and possibly some of the many other control characters spread throughout Unicode (though 30 is already a lot, let alone 62).
 
 ### BAR (BOB Anti-Router)
 
