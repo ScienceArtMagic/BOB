@@ -26,21 +26,3 @@ class StraightThroughEstimator(nn.Module):
 
     def forward(self, x, soft=False):
         return STEFunction.apply(x, soft)
-
-
-# Example Usage
-x = torch.tensor([-1.5, 0.0, 2.3], requires_grad=True)
-ste = StraightThroughEstimator()
-
-# Using the soft mode
-y_soft = ste(x, soft=True)
-y_soft.sum().backward(retain_graph=True)
-print("Soft Gradients:", x.grad)
-
-# Reset gradients
-x.grad.zero_()
-
-# Using the hard mode
-y_hard = ste(x, soft=False)
-y_hard.sum().backward()
-print("Hard Gradients:", x.grad)
