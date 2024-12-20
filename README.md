@@ -17,11 +17,11 @@ BOB and his BAT get lonely sometimes, but BAE is the perfect companion.
 
 Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word token embedding matrix) mentioned above, BAE transforms and combines BAT's outputs into model input vectors: 
 
-1. Vertically-stacked horizontal bitmasks of ordinals, increasing by powers of 2 (3/16 of `hidden_dim`)
-2. Simple, compact Absolute Positional Encoding (explicit, "coarse"/per "token", 1/16 of `hidden_dim`) based on iterable chunks of ordinals.
+1. Vertically-stacked horizontal bitmasks of ordinals, increasing by powers of 2 (1/8 of `hidden_dim`)
+2. Simple, compact Absolute Positional Encoding (explicit, "coarse"/per "token", 1/8 of `hidden_dim`) based on iterable chunks of ordinals.
 3. Bit lengths of each ordinal (and thus, implicitly, fine per-character, and even, technically, explicit per-exact-bit APE - 3/8 of `hidden_dim`)
 4. Byte representations (3/8 of `hidden_dim`),
-5. Negative adaptive-average-pooled and mean representations of 3 and 4 in their unfilled slots.
+5. Negative adaptive-average-pooled and mean representations of 3 and 4 in their unfilled slots, and negative offsets in unfilled slots of 1 and 2.
 
 BAE then concatenates them all to a single vector and negative-offsets the remaining unfilled slots (to avoid zero inputs, restorable via a simple $`ReLU`$ if/when needed).
 
