@@ -25,7 +25,7 @@ Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word 
 
 BAE then concatenates them all to a single vector and negative-offsets the remaining unfilled slots (to avoid zero inputs, restorable via a simple $`ReLU`$ if/when needed).
 
-The resulting vectors are somewhat similar to those resulting from tokenization + WTE lookup but, other than special "tokens," only need the information available from basic string conversion methods.
+The resulting vectors are somewhat similar to those resulting from tokenization + WTE lookup but, other than special tokens, only need the information available from basic string conversion methods.
 
 ### BLAH (BOB Language model Anti-Head)
 BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
