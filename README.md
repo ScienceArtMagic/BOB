@@ -25,7 +25,7 @@ Instead of the usually-massive (`hidden_dim * vocab_size`) "lookup table" (word 
 
 BAE then concatenates them all to a single vector and negative-offsets the remaining unfilled slots (to avoid zero inputs, restorable via a simple $`ReLU`$ if/when needed).
 
-The resulting vectors are somewhat similar to those resulting from tokenization + WTE lookup but, other than special tokens, only need the information available from basic string conversion methods.
+The resulting vectors are somewhat similar to those resulting from tokenization + WTE lookup but, other than special tokens, they only need the information available from basic string conversion methods.
 
 ### BLAH (BOB Language model Anti-Head)
 BOB is a talker. When you buck as many trends as BOB, you've got a lot to say.
@@ -40,9 +40,9 @@ TODO: Investigate the awkwardly-abbreviated [REST (Retrieval-Based Speculative D
 
 This byte output is then passed back to BAE to construct new vectors, potentially prefilling multiple continuation vectors per next pass (TODO).
 
-### SISTERS (SImple Special Token Embeddings are Really Small)
+### SiSTERS (Simple Special Token Embeddings are Really Small)
 
-BOB and his friends make their own substitute "tokens"/"embeddings," but his SISTERS help with the real deal on special occasions.
+BOB and his friends make their own substitute "tokens"/"embeddings," but his SiSTERS help with the real deal on special occasions.
 
 No quotes here. Special tokens are still tokens/embeddings just as they are in fully tokenized models, but only in place of (by default/for the time being) 30 of the first 32 UTF-8 codepoints; `\t`/`b\x09` (`9` base-10), a.k.a. "tab" and `\n`/`b\x0a` (`10` base-10) a.k.a. "linefeed"/"newline" are combined with other printable characters (you'll have to handle conversion to Windows formatting yourself, if you need carriage returns). All other codepoints from `b\x00` (`0` base-10) to `b\x31` (`31` base-10) are stored in a `vocab.json`/`tokenizer.json` just like you would expect from a tokenized Hugging Face Transformers-compatible model. Due to the nature of special tokens (and the tiny size of a `hidden_dim * 30` embedding matrix), leaving their representations trainable, and the full `hidden_dim`, makes sense. 
 
@@ -50,7 +50,7 @@ In the future, more special tokens may be made available for the currently unuse
 
 ### BAR (BOB Anti-Router)
 
-When BOB goes to the BAR, he doesn't just rant about tokenization; he also has plenty to say about Mixture-of-Experts routing. BOB is surprisingly popular there. His no-nonsense demeanor plays well with generalists and specialists alike.
+When BOB goes to the BAR, he doesn't just rant about tokenization; he also has plenty to say about Mixture-of-Experts routing. BOB is surprisingly popular there; his no-nonsense demeanor plays well with generalists and specialists.
 
 BAR makes it easy to route more generalist parameters with bitmasks (i.e., "one or the other" on a parameter—and/or group-specific level from two identically shaped blocks with different values), as well as far more numerous, specialized experts by bytes (including additional granularity for multi-byte characters) or even ordinals (theoretically, 1,114,111 to choose from).
 
