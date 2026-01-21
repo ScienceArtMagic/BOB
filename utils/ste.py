@@ -13,16 +13,13 @@ class STEFunction(torch.autograd.Function):
     @staticmethod
     def backward(ctx, grad_output):
         (input,) = ctx.saved_tensors
-        if ctx.soft:
-            grad_input = grad_output * F.softsign(input)  # Soft gradient
-        else:
-            grad_input = grad_output.clamp(min=-1, max=1)  # Hard gradient
-        return grad_input
+        return grad_output.clamp(min=-1, max=1)
+        
 
 
 class StraightThroughEstimator(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(self, x: torch.Tensor, soft: bool = False) -> torch.Tensor:
-        return STEFunction.apply(x, soft)
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return STEFunction.apply(x)
